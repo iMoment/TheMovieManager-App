@@ -70,7 +70,9 @@ extension TMDBClient {
     private func getRequestToken(completionHandlerForToken: (success: Bool, requestToken: String?, errorString: String?) -> Void) {
         
         /* 1. Specify parameters, the API method, and the HTTP body (if POST) */
+        
         /* 2. Make the request */
+        
         /* 3. Send the desired value(s) to completion handler */
         
         /*
