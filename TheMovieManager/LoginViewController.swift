@@ -59,12 +59,7 @@ extension LoginViewController {
         loginButton.enabled = enabled
         debugTextLabel.enabled = enabled
         
-        // Adjust login button alpha
-        if enabled {
-            loginButton.alpha = 1.0
-        } else {
-            loginButton.alpha = 0.5
-        }
+        enabled ? (loginButton.alpha = 1.0) : (loginButton.alpha = 0.5)
     }
     
     private func displayError(errorString: String?) {
