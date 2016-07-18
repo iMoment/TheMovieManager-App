@@ -208,10 +208,21 @@ extension TMDBClient {
     
     func getConfig(completionHandlerForConfig: (didSucceed: Bool, error: NSError?) -> Void) {
         
-        /* 1. Specify parameters, the API method, and the HTTP body (if POST) */
-        /* 2. Make the request */
-        /* 3. Send the desired value(s) to completion handler */
+        // Set parameters
+        let parameters = [String : AnyObject]()
         
+        // Make the request
+        taskForGETMethod(Methods.Config, parameters: parameters) { (results, error) in
+            
+            if let error = error {
+                completionHandlerForConfig(didSucceed: false, error: error)
+            } else if let newConfig = TMDBConfig(dictionary: results as! [String : AnyObject]) {
+                self.config = newConfig
+                completionHandlerForConfig(didSucceed: true, error: nil)
+            } else {
+                completionHandlerForConfig(didSucceed: false, error: NSError(domain: "getConfig", code: 1, userInfo: [NSLocalizedDescriptionKey : "Could not parse getConfig"]))
+            }
+        }
     }
     
     // POST Convenience Methods
