@@ -109,7 +109,7 @@ extension TMDBClient {
     private func getSessionID(requestToken: String?, completionHandlerForSession: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
         
         // Set parameters
-        let parameters: [String:AnyObject] = [ParameterKeys.RequestToken : requestToken!]
+        let parameters: [String:AnyObject] = [ParameterKeys.RequestToken : self.requestToken!]
         
         // Make the request
         taskForGETMethod(Methods.AuthenticationSessionNew, parameters: parameters) { (results, error) in
@@ -130,17 +130,25 @@ extension TMDBClient {
     
     private func getUserID(completionHandlerForUserID: (success: Bool, userID: Int?, errorString: String?) -> Void) {
         
-        /* 1. Specify parameters, the API method, and the HTTP body (if POST) */
-        /* 2. Make the request */
-        /* 3. Send the desired value(s) to completion handler */
+        // Set parameters
+        let parameters: [String:AnyObject] = [ParameterKeys.SessionID : self.sessionID!]
         
-        /*
-        
-        taskForGETMethod(method, parameters: parameters) { (results, error) in
-        
+        // Make the request
+        taskForGETMethod(Methods.Account, parameters: parameters) { (results, error) in
+            
+            if let error = error {
+                print(error)
+                completionHandlerForUserID(success: false, userID: nil, errorString: "Login Failed. (User ID)")
+            } else {
+                if let userID = results[TMDBClient.JSONResponseKeys.UserID] as? Int {
+                    completionHandlerForUserID(success: true, userID: userID, errorString: nil)
+                } else {
+                    print("Could not find \(TMDBClient.JSONResponseKeys.UserID) in \(results)")
+                    completionHandlerForUserID(success: false, userID: nil, errorString: "Login Failed. (User ID)")
+                }
+            }
         }
-        
-        */
+      
     }
     
     // GET Convenience Methods
