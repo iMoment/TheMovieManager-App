@@ -29,13 +29,14 @@ class TMDBClient: NSObject {
 
     // GET
     
-    func taskForGETMethod(method: String, var parameters: [String:AnyObject], completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    func taskForGETMethod(method: String, parameters: [String:AnyObject], completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
         // Set parameters
-        parameters[ParameterKeys.ApiKey] = Constants.ApiKey
+        var parametersGET = parameters
+        parametersGET[ParameterKeys.ApiKey] = Constants.ApiKey
         
         // Build URL / Configure request
-        let request = NSURLRequest(URL: TMDBClient.tmdbURLFromParameters(parameters, withPathExtension: method))
+        let request = NSURLRequest(URL: TMDBClient.tmdbURLFromParameters(parametersGET, withPathExtension: method))
         
         // Make request
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
@@ -71,13 +72,14 @@ class TMDBClient: NSObject {
     
     // POST
     
-    func taskForPOSTMethod(method: String, var parameters: [String:AnyObject], jsonBody: String, completionHandlerForPOST: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    func taskForPOSTMethod(method: String, parameters: [String:AnyObject], jsonBody: String, completionHandlerForPOST: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
         // Set parameters
-        parameters[ParameterKeys.ApiKey] = Constants.ApiKey
+        var parametersPOST = parameters
+        parametersPOST[ParameterKeys.ApiKey] = Constants.ApiKey
         
         // Build URL / Configure request
-        let request = NSMutableURLRequest(URL: TMDBClient.tmdbURLFromParameters(parameters, withPathExtension: method))
+        let request = NSMutableURLRequest(URL: TMDBClient.tmdbURLFromParameters(parametersPOST, withPathExtension: method))
         request.HTTPMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
