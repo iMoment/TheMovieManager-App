@@ -84,6 +84,17 @@ extension MoviePickerViewController: UISearchBarDelegate {
             movieTableView?.reloadData()
             return
         }
+        
+        // New search
+        searchTask = TMDBClient.sharedInstance().getMoviesForSearchString(searchText) { (movies, error) in
+            self.searchTask = nil
+            if let movies = movies {
+                self.movies = movies
+                performUIUpdatesOnMain {
+                    self.movieTableView!.reloadData()
+                }
+            }
+        }
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
