@@ -131,6 +131,21 @@ class MovieDetailViewController: UIViewController {
     }
     
     @IBAction func toggleWatchlist(sender: AnyObject) {
-
+        let shouldWatchlist = !isWatchlist
+        
+        TMDBClient.sharedInstance().postToWatchlist(movie!, watchlist: shouldWatchlist) { (statusCode, error) in
+            if let error = error {
+                print(error)
+            } else {
+                if statusCode == 1 || statusCode == 12 || statusCode == 13 {
+                    self.isWatchlist = shouldWatchlist
+                    performUIUpdatesOnMain {
+                        self.toggleWatchlistButton.tintColor = (shouldWatchlist) ? nil : UIColor.blackColor()
+                    }
+                } else {
+                    print("Unexpected status code \(statusCode)")
+                }
+            }
+        }
     }
 }
