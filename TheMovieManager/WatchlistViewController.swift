@@ -27,6 +27,17 @@ class WatchlistViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        TMDBClient.sharedInstance().getWatchlistMovies { (movies, error) in
+            if let movies = movies {
+                self.movies = movies
+                performUIUpdatesOnMain {
+                    self.moviesTableView.reloadData()
+                }
+            } else {
+                print(error)
+            }
+        }
     }
     
     // Logout
@@ -51,6 +62,18 @@ extension WatchlistViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel!.text = movie.title
         cell.imageView!.image = UIImage(named: "Film")
         cell.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
+        
+        if let posterPath = movie.posterPath {
+            TMDBClient.sharedInstance().taskForGETImage(TMDBClient.PosterSizes.RowPoster, filePath: posterPath, completionHandlerForImage: { (imageData, error) in
+                if let image = UIImage(data: imageData!) {
+                    performUIUpdatesOnMain {
+                        cell.imageView!.image = image
+                    }
+                } else {
+                    print(error)
+                }
+            })
+        }
                 
         return cell        
     }
