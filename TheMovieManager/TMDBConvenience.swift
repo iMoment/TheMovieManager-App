@@ -109,7 +109,7 @@ extension TMDBClient {
     private func getSessionID(requestToken: String?, completionHandlerForSession: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
         
         // Set parameters
-        let parameters: [String:AnyObject] = [ParameterKeys.RequestToken : self.requestToken!]
+        let parameters = [TMDBClient.ParameterKeys.RequestToken : requestToken!]
         
         // Make the request
         taskForGETMethod(Methods.AuthenticationSessionNew, parameters: parameters) { (results, error) in
@@ -131,7 +131,7 @@ extension TMDBClient {
     private func getUserID(completionHandlerForUserID: (success: Bool, userID: Int?, errorString: String?) -> Void) {
         
         // Set parameters
-        let parameters: [String:AnyObject] = [ParameterKeys.SessionID : self.sessionID!]
+        let parameters = [TMDBClient.ParameterKeys.SessionID : TMDBClient.sharedInstance().sessionID!]
         
         // Make the request
         taskForGETMethod(Methods.Account, parameters: parameters) { (results, error) in
