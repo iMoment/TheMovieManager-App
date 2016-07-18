@@ -108,10 +108,26 @@ class MovieDetailViewController: UIViewController {
             }
         }
     }
+    
     // Actions
     
     @IBAction func toggleFavorite(sender: AnyObject) {
-
+        let shouldFavorite = !isFavorite
+        
+        TMDBClient.sharedInstance().postToFavorites(movie!, favorite: shouldFavorite) { (statusCode, error) in
+            if let error = error {
+                print(error)
+            } else {
+                if statusCode == 1 || statusCode == 12 || statusCode == 13 {
+                    self.isFavorite = shouldFavorite
+                    performUIUpdatesOnMain {
+                        self.toggleFavoriteButton.tintColor = (shouldFavorite) ? nil : UIColor.blackColor()
+                    }
+                } else {
+                    print("Unexpected status code \(statusCode)")
+                }
+            }
+        }
     }
     
     @IBAction func toggleWatchlist(sender: AnyObject) {
