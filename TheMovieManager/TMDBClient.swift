@@ -123,15 +123,15 @@ class TMDBClient: NSObject {
     
     func taskForGETImage(size: String, filePath: String, completionHandlerForImage: (imageData: NSData?, error: NSError?) -> Void) -> NSURLSessionTask {
         
-        /* 1. Set the parameters */
-        // There are none...
+        // Set parameters
+        // There are none.
         
-        /* 2/3. Build the URL and configure the request */
+        // Build URL / Configure request
         let baseURL = NSURL(string: config.baseImageURLString)!
         let url = baseURL.URLByAppendingPathComponent(size).URLByAppendingPathComponent(filePath)
         let request = NSURLRequest(URL: url)
         
-        /* 4. Make the request */
+        // Make request
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
             func sendError(error: String) {
@@ -140,29 +140,26 @@ class TMDBClient: NSObject {
                 completionHandlerForImage(imageData: nil, error: NSError(domain: "taskForGETImage", code: 1, userInfo: userInfo))
             }
             
-            /* GUARD: Was there an error? */
             guard (error == nil) else {
                 print("There was an error with your request: \(error)")
                 return
             }
             
-            /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 print("Your request returned a status code other than 2xx!")
                 return
             }
             
-            /* GUARD: Was there any data returned? */
             guard let data = data else {
                 print("No data was returned by the request!")
                 return
             }
             
-            /* 5/6. Parse the data and use the data (happens in completion handler) */
+            // Parse data
             completionHandlerForImage(imageData: data, error: nil)
         }
         
-        /* 7. Start the request */
+        // Start the request
         task.resume()
         
         return task
@@ -210,7 +207,7 @@ class TMDBClient: NSObject {
         return components.URL!
     }
     
-    // MARK: Shared Instance
+    // Shared Instance
     
     class func sharedInstance() -> TMDBClient {
         struct Singleton {
