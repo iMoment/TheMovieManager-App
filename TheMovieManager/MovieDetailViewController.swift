@@ -58,11 +58,7 @@ class MovieDetailViewController: UIViewController {
                     }
                     
                     performUIUpdatesOnMain {
-                        if self.isFavorite {
-                            self.toggleFavoriteButton.tintColor = nil
-                        } else {
-                            self.toggleFavoriteButton.tintColor = UIColor.blackColor()
-                        }
+                        self.isFavorite ? (self.toggleFavoriteButton.tintColor = nil) : (self.toggleFavoriteButton.tintColor = UIColor.blackColor())
                     }
                 } else {
                     print(error)
@@ -80,11 +76,7 @@ class MovieDetailViewController: UIViewController {
                     }
                     
                     performUIUpdatesOnMain {
-                        if self.isWatchlist {
-                            self.toggleWatchlistButton.tintColor = nil
-                        } else {
-                            self.toggleWatchlistButton.tintColor = UIColor.blackColor()
-                        }
+                        self.isWatchlist ? (self.toggleWatchlistButton.tintColor = nil) : (self.toggleWatchlistButton.tintColor = UIColor.blackColor())
                     }
                 } else {
                     print(error)
